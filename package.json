@@ -1,0 +1,28 @@
+{
+  "name": "my-trainer",
+  "description": "Next.js trainer app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/otaviojacobi/my-trainer.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/otaviojacobi/my-trainer/issues"
+  },
+  "homepage": "https://github.com/otaviojacobi/my-trainer#readme",
+  "dependencies": {
+    "next": "^10.2.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  },
+  "devDependencies": {
+    "eslint": "^7.26.0"
+  }
+}
