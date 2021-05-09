@@ -34,6 +34,8 @@ export default function Reset() {
 
     setIsChangingPwd(true);
 
+    console.log(router.query);
+
     const password = event.target.password.value;
     const passwordConfirmation = event.target.passwordConfirmation.value;
     const code = router.query.code;
@@ -64,8 +66,6 @@ export default function Reset() {
 
   if (!router.query.code) {
     return <div>Forbidden</div>;
-  } else {
-    console.log(router.query.code);
   }
 
   return (
