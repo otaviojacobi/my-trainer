@@ -1,5 +1,5 @@
 import React from 'react';
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 
 import Avatar from '@material-ui/core/Avatar';
@@ -8,9 +8,11 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
+import Alert from '@material-ui/lab/Alert';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
@@ -19,44 +21,55 @@ import Copyright from '../../src/components/Copyright';
 import useStyles from '../../src/loginRegisterStyle';
 
 export default function SignIn() {
-  const classes = useStyles()
-  const router = useRouter()
+  const classes = useStyles();
+  const router = useRouter();
 
-  const handleSubmit = useCallback((e) => {
-    e.preventDefault()
+  const [loginFailed, setLoginFailed] = useState(false);
+  const [isFetchingUser, setIsFetchingUser] = useState(false);
 
-    const email = e.target.email.value;
-    const password = e.target.password.value;
-
-    fetch(`${process.env.MY_TRAINER_BACKEND}/auth/local`, {
+  const login = (email, password) => {
+    return fetch(`${process.env.MY_TRAINER_BACKEND}/auth/local`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         identifier: email,
         password
-      }),
-    }).then((res) => {
-      // Do a fast client-side transition to the already prefetched dashboard page
-      if (res.ok) router.push('/dashboard')
-    })
-  }, [])
+      })
+    });
+  };
+
+  const handleSubmit = useCallback(async (event) => {
+    event.preventDefault();
+
+    setIsFetchingUser(true);
+
+    const email = event.target.email.value;
+    const password = event.target.password.value;
+    const res = await login(email, password);
+
+    setIsFetchingUser(false);
+
+    if (res.ok) {
+      router.push('/dashboard');
+    } else {
+      setLoginFailed(true);
+    }
+  }, []);
 
   useEffect(() => {
     // Prefetch the dashboard page
     router.prefetch('/dashboard')
-  }, [])
+  }, []);
 
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
+        {isFetchingUser ? <CircularProgress className={classes.avatar} color={"secondary"}/> : <Avatar className={classes.avatar}><LockOutlinedIcon /></Avatar> }
         <Typography component="h1" variant="h5">
-          Sign in
+          Sign in!
         </Typography>
-        <form className={classes.form} noValidate onSubmit={handleSubmit}>
+        <form className={classes.form} onSubmit={handleSubmit}>
           <TextField
             variant="outlined"
             margin="normal"
@@ -66,6 +79,7 @@ export default function SignIn() {
             label="Email Address"
             name="email"
             autoComplete="email"
+            type="email"
             autoFocus
           />
           <TextField
@@ -83,6 +97,7 @@ export default function SignIn() {
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
           />
+          {loginFailed && <Alert severity="error" >You have entered an invalid username or password</Alert>}
           <Button
             type="submit"
             fullWidth
@@ -99,7 +114,7 @@ export default function SignIn() {
               </Link>
             </Grid>
             <Grid item>
-              <Link onClick={() => router.push('/signup')} variant="body2">
+              <Link href="#" onClick={() => router.push('/signup')} variant="body2">
                 {"Don't have an account? Sign Up"}
               </Link>
             </Grid>

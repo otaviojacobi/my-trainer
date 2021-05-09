@@ -1,5 +1,5 @@
 import React from 'react';
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 
 import Avatar from '@material-ui/core/Avatar';
@@ -8,9 +8,11 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
+import Alert from '@material-ui/lab/Alert';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
@@ -19,26 +21,39 @@ import Copyright from '../../src/components/Copyright';
 import useStyles from '../../src/loginRegisterStyle';
 
 export default function SignUp() {
-    const classes = useStyles()
-    const router = useRouter()
-  
-    const handleSubmit = useCallback((e) => {
-      e.preventDefault()
-  
-      const username = `${e.target.firstName.value} ${e.target.lastName.value}`
-      const email = e.target.email.value;
-      const password = e.target.password.value;
+    const classes = useStyles();
+    const router = useRouter();
 
-      fetch(`${process.env.MY_TRAINER_BACKEND}/auth/local/register`, {
+    const [registerFailed, setRegisterFailed] = useState(false);
+    const [isCreatingUser, setIsCreatingUser] = useState(false);
+
+    const register = (username, email, password) => {
+      return fetch(`${process.env.MY_TRAINER_BACKEND}/auth/local/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, email, password }),
-      }).then((res) => {
-        // Do a fast client-side transition to the already prefetched dashboard page
-        if (res.ok) router.push('/dashboard')
-      })
+      });
+    };
 
-    }, [])
+    const handleSubmit = useCallback(async (event) => {
+      event.preventDefault();
+  
+      setIsCreatingUser(true);
+  
+      const username = `${event.target.firstName.value} ${event.target.lastName.value}`
+      const email = event.target.email.value;
+      const password = event.target.password.value;
+      const res = await register(username, email, password);
+  
+      setIsCreatingUser(false);
+  
+      if (res.ok) {
+        setRegisterFailed(false);
+        router.push('/dashboard');
+      } else {
+        setRegisterFailed(true);
+      }
+    }, []);
   
     useEffect(() => {
       // Prefetch the dashboard page
@@ -49,13 +64,11 @@ export default function SignUp() {
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
+        {isCreatingUser ? <CircularProgress className={classes.avatar} color={"secondary"}/> : <Avatar className={classes.avatar}><LockOutlinedIcon /></Avatar> }
         <Typography component="h1" variant="h5">
           Sign up!
         </Typography>
-        <form className={classes.form} noValidate onSubmit={handleSubmit}>
+        <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -87,6 +100,7 @@ export default function SignUp() {
                 fullWidth
                 id="email"
                 label="Email Address"
+                type="email"
                 name="email"
                 autoComplete="email"
               />
@@ -103,13 +117,8 @@ export default function SignUp() {
                 autoComplete="current-password"
               />
             </Grid>
-            <Grid item xs={12}>
-              <FormControlLabel
-                control={<Checkbox value="allowExtraEmails" color="primary" />}
-                label="I want to receive inspiration, marketing promotions and updates via email."
-              />
-            </Grid>
           </Grid>
+          {registerFailed && <Alert severity="error" >Invalid username, email or password</Alert>}
           <Button
             type="submit"
             fullWidth
@@ -121,7 +130,7 @@ export default function SignUp() {
           </Button>
           <Grid container justify="flex-end">
             <Grid item>
-              <Link onClick={() => router.push('/login')} variant="body2">
+              <Link href="#" onClick={() => router.push('/login')} variant="body2">
                 Already have an account? Sign in
               </Link>
             </Grid>
