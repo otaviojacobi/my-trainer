@@ -1,13 +1,12 @@
-import React from "react";
-import { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/router";
+
+import { useSession, signIn } from "next-auth/client";
 
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
 import Alert from "@material-ui/lab/Alert";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
@@ -23,62 +22,63 @@ import Copyright from "../../src/components/Copyright";
 import DividerWithText from "../../src/components/DividerWithText";
 import useStyles from "../../src/loginRegisterStyle";
 
-import { useSession, signIn, signOut } from "next-auth/client";
-
-
 export default function SignUp() {
   const classes = useStyles();
   const router = useRouter();
 
   const [registerFailed, setRegisterFailed] = useState(false);
   const [isCreatingUser, setIsCreatingUser] = useState(false);
-  const [session, loading] = useSession();
+  const [session] = useSession();
 
-  const register = (username, email, password) => {
-    return fetch(`${process.env.MY_TRAINER_BACKEND}/auth/local/register`, {
+  const register = (username, email, password) =>
+    fetch(`${process.env.MY_TRAINER_BACKEND}/auth/local/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, email, password }),
     });
-  };
 
-  const credentialsRegister = useCallback(async (event) => {
-    event.preventDefault();
+  const credentialsRegister = useCallback(
+    async event => {
+      event.preventDefault();
 
-    setIsCreatingUser(true);
+      setIsCreatingUser(true);
 
-    const username = `${event.target.firstName.value} ${event.target.lastName.value}`;
-    const email = event.target.email.value;
-    const password = event.target.password.value;
-    const res = await register(username, email, password);
-    
-    setIsCreatingUser(false);
+      const username = `${event.target.firstName.value} ${event.target.lastName.value}`;
+      const email = event.target.email.value;
+      const password = event.target.password.value;
+      const res = await register(username, email, password);
 
-    let user = {ok : false};
-    if (res.ok) {
-      user = await signIn('credentials', {email, password, redirect: false});
-    }
-    if (user.ok) {
+      setIsCreatingUser(false);
+
+      let user = { ok: false };
+      if (res.ok) {
+        user = await signIn("credentials", {
+          email,
+          password,
+          redirect: false,
+        });
+      }
+      if (user.ok) {
         setRegisterFailed(false);
         router.push("/dashboard");
-    } 
-    else {
-      setRegisterFailed(true);
-    }
-  }, []);
+      } else {
+        setRegisterFailed(true);
+      }
+    },
+    [router]
+  );
 
   const googleLogin = event => {
-
     event.preventDefault();
 
     setIsCreatingUser(true);
-    const user = signIn('google', {callbackUrl: '/dashboard'});
+    signIn("google", { callbackUrl: "/dashboard" });
   };
 
   useEffect(() => {
     // Prefetch the dashboard page
     router.prefetch("/dashboard");
-  }, []);
+  }, [router]);
 
   if (session) {
     router.push("/dashboard");
@@ -89,7 +89,7 @@ export default function SignUp() {
       <CssBaseline />
       <div className={classes.paper}>
         {isCreatingUser ? (
-          <CircularProgress className={classes.avatar} color={"secondary"} />
+          <CircularProgress className={classes.avatar} color="secondary" />
         ) : (
           <Avatar className={classes.avatar}>
             <LockOutlinedIcon />
@@ -181,8 +181,7 @@ export default function SignUp() {
           alignItems: "center",
         }}
       >
-        <GoogleButton type="light" onClick={googleLogin}/>
-
+        <GoogleButton type="light" onClick={googleLogin} />
       </div>
       <Box mt={5}>
         <Copyright />

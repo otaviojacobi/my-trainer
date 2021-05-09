@@ -1,16 +1,11 @@
-import React from "react";
-import { useCallback, useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/router";
 
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
 import Alert from "@material-ui/lab/Alert";
-import Link from "@material-ui/core/Link";
-import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
@@ -18,7 +13,6 @@ import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 
 import Copyright from "../../src/components/Copyright";
-import DividerWithText from "../../src/components/DividerWithText";
 import useStyles from "../../src/loginRegisterStyle";
 
 export default function Reset() {
@@ -28,7 +22,7 @@ export default function Reset() {
   const [changePwdFailed, setChangePwdFailed] = useState(false);
   const [isChangingPwd, setIsChangingPwd] = useState(false);
 
-  const sendResetEmail = async (event) => {
+  const sendResetEmail = async event => {
 
 
     event.preventDefault();
@@ -37,7 +31,7 @@ export default function Reset() {
 
     const password = event.target.password.value;
     const passwordConfirmation = event.target.passwordConfirmation.value;
-    const code = router.query.code;
+    const { code }  = router.query;
 
     const res = await fetch(
       `${process.env.MY_TRAINER_BACKEND}/auth/reset-password`,
@@ -56,14 +50,14 @@ export default function Reset() {
     } else {
       setChangePwdFailed(true);
     }
-  }
+  };
 
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
         {isChangingPwd ? (
-          <CircularProgress className={classes.avatar} color={"secondary"} />
+          <CircularProgress className={classes.avatar} color="secondary"/>
         ) : (
           <Avatar className={classes.avatar}>
             <LockOutlinedIcon />

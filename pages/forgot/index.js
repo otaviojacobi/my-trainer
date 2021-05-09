@@ -1,13 +1,11 @@
-import React from "react";
-import { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { useSession } from "next-auth/client";
 
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
 import Alert from "@material-ui/lab/Alert";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
@@ -18,10 +16,7 @@ import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 
 import Copyright from "../../src/components/Copyright";
-import DividerWithText from "../../src/components/DividerWithText";
 import useStyles from "../../src/loginRegisterStyle";
-
-import { useSession, signIn } from "next-auth/client";
 
 export default function Forgot() {
   const classes = useStyles();
@@ -30,37 +25,39 @@ export default function Forgot() {
   const [sendEmailFailed, setSendEmailFailed] = useState(false);
   const [isSendingEmail, setIsSendingEmail] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
-  const [session, loading] = useSession();
+  const [session] = useSession();
 
-  const sendResetEmail = useCallback(async (event) => {
+  const sendResetEmail = useCallback(async event => {
     event.preventDefault();
 
     setIsSendingEmail(true);
 
     const email = event.target.email.value;
 
-    const res = await fetch(`${process.env.MY_TRAINER_BACKEND}/auth/forgot-password`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email }),
-    });
+    const res = await fetch(
+      `${process.env.MY_TRAINER_BACKEND}/auth/forgot-password`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      }
+    );
 
     setIsSendingEmail(false);
 
-    if(res.ok) {
-        setSendEmailFailed(false);
-        setEmailSent(true);
+    if (res.ok) {
+      setSendEmailFailed(false);
+      setEmailSent(true);
     } else {
-        setEmailSent(false);
-        setSendEmailFailed(true);
+      setEmailSent(false);
+      setSendEmailFailed(true);
     }
-
   }, []);
 
   useEffect(() => {
     // Prefetch the dashboard page
     router.prefetch("/login");
-  }, []);
+  }, [router]);
 
   if (session) {
     router.push("/dashboard");
@@ -71,7 +68,7 @@ export default function Forgot() {
       <CssBaseline />
       <div className={classes.paper}>
         {isSendingEmail ? (
-          <CircularProgress className={classes.avatar} color={"secondary"} />
+          <CircularProgress className={classes.avatar} color="secondary" />
         ) : (
           <Avatar className={classes.avatar}>
             <LockOutlinedIcon />
@@ -102,8 +99,15 @@ export default function Forgot() {
           >
             Send Reset Email
           </Button>
-          {sendEmailFailed && <Alert severity="error" >Failed to send reset e-mail</Alert>}
-          {emailSent && <Alert severity="success" > An e-mail was sent with following instructions !</Alert>}
+          {sendEmailFailed && (
+            <Alert severity="error">Failed to send reset e-mail</Alert>
+          )}
+          {emailSent && (
+            <Alert severity="success">
+              {" "}
+              An e-mail was sent with following instructions !
+            </Alert>
+          )}
           <Grid container>
             <Grid item xs>
               <Link
@@ -120,7 +124,7 @@ export default function Forgot() {
                 onClick={() => router.push("/signup")}
                 variant="body2"
               >
-                Don't have an account ? Sign up
+                Don&apos;t have an account ? Sign up
               </Link>
             </Grid>
           </Grid>
