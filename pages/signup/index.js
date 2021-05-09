@@ -17,8 +17,13 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 
+import GoogleButton from 'react-google-button'
+
 import Copyright from '../../src/components/Copyright';
+import DividerWithText from '../../src/components/DividerWithText';
 import useStyles from '../../src/loginRegisterStyle';
+
+import { register, googleSignIn } from '../../src/auth';
 
 export default function SignUp() {
     const classes = useStyles();
@@ -26,14 +31,6 @@ export default function SignUp() {
 
     const [registerFailed, setRegisterFailed] = useState(false);
     const [isCreatingUser, setIsCreatingUser] = useState(false);
-
-    const register = (username, email, password) => {
-      return fetch(`${process.env.MY_TRAINER_BACKEND}/auth/local/register`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, email, password }),
-      });
-    };
 
     const handleSubmit = useCallback(async (event) => {
       event.preventDefault();
@@ -136,6 +133,13 @@ export default function SignUp() {
             </Grid>
           </Grid>
         </form>
+      </div>
+      <DividerWithText>or</DividerWithText>
+      <div style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>
+        <GoogleButton
+            type="light"
+            onClick={googleSignIn}
+        />
       </div>
       <Box mt={5}>
         <Copyright />
