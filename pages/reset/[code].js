@@ -35,13 +35,9 @@ export default function Reset() {
 
     setIsChangingPwd(true);
 
-    console.log('quero');
-
     const password = event.target.password.value;
     const passwordConfirmation = event.target.passwordConfirmation.value;
     const code = router.query.code;
-
-    console.log(code);
 
     const res = await fetch(
       `${process.env.MY_TRAINER_BACKEND}/auth/reset-password`,
