@@ -23,12 +23,13 @@ import useStyles from "../../src/loginRegisterStyle";
 
 export default function Reset() {
   const classes = useStyles();
-  const router = useRouter();
 
   const [changePwdFailed, setChangePwdFailed] = useState(false);
   const [isChangingPwd, setIsChangingPwd] = useState(false);
 
   const sendResetEmail = async (event) => {
+
+    const router = useRouter();
 
     event.preventDefault();
 
@@ -55,10 +56,6 @@ export default function Reset() {
     } else {
       setChangePwdFailed(true);
     }
-  }
-
-  if (!router.query.code) {
-    return <div>Forbidden</div>;
   }
 
   return (
