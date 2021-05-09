@@ -55,7 +55,7 @@ export default function Reset() {
     } else {
       setChangePwdFailed(true);
     }
-  }, []);
+  }
 
   if (!router.query.code) {
     return <div>Forbidden</div>;
