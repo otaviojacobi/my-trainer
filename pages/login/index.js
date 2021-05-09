@@ -23,7 +23,7 @@ import Copyright from '../../src/components/Copyright';
 import DividerWithText from '../../src/components/DividerWithText';
 import useStyles from '../../src/loginRegisterStyle';
 
-import { login, googleSignIn } from '../../src/auth';
+import { useSession, signIn } from "next-auth/client";
 
 export default function SignIn() {
   const classes = useStyles();
@@ -31,29 +31,43 @@ export default function SignIn() {
 
   const [loginFailed, setLoginFailed] = useState(false);
   const [isFetchingUser, setIsFetchingUser] = useState(false);
+  const [session, loading] = useSession();
 
-  const handleSubmit = useCallback(async (event) => {
+  const credentialsLogin = useCallback(async (event) => {
     event.preventDefault();
 
     setIsFetchingUser(true);
 
     const email = event.target.email.value;
     const password = event.target.password.value;
-    const res = await login(email, password);
+
+    const user = await signIn('credentials', {email, password, redirect: false});
 
     setIsFetchingUser(false);
 
-    if (res.ok) {
+    if (user.ok) {
       router.push('/dashboard');
     } else {
       setLoginFailed(true);
     }
   }, []);
 
+  const googleLogin = event => {
+
+    event.preventDefault();
+
+    setIsFetchingUser(true);
+    const user = signIn('google', {callbackUrl: '/dashboard'});
+  };
+
   useEffect(() => {
     // Prefetch the dashboard page
     router.prefetch('/dashboard')
   }, []);
+
+  if(session) {
+    router.push('/dashboard');
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -63,7 +77,7 @@ export default function SignIn() {
         <Typography component="h1" variant="h5">
           Sign in!
         </Typography>
-        <form className={classes.form} onSubmit={handleSubmit}>
+        <form className={classes.form} onSubmit={credentialsLogin}>
           <TextField
             variant="outlined"
             margin="normal"
@@ -117,10 +131,7 @@ export default function SignIn() {
       </div>
       <DividerWithText>or</DividerWithText>
       <div style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>
-        <GoogleButton
-            type="light"
-            onClick={googleSignIn}
-        />
+        <GoogleButton type="light" onClick={googleLogin}/>
       </div>
       <Box mt={5}>
         <Copyright />
