@@ -28,10 +28,6 @@ export default function SignIn() {
     const email = e.target.email.value;
     const password = e.target.password.value;
 
-    console.log(email)
-    console.log(password)
-    
-
     fetch(`${process.env.MY_TRAINER_BACKEND}/auth/local`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
