@@ -29,30 +29,32 @@ export default function Reset() {
   const [isChangingPwd, setIsChangingPwd] = useState(false);
 
   const sendResetEmail = useCallback(async (event) => {
+
     event.preventDefault();
-    
+
     setIsChangingPwd(true);
-    
+
     const password = event.target.password.value;
     const passwordConfirmation = event.target.passwordConfirmation.value;
     const code = router.query.code;
 
-
-    const res = await fetch(`${process.env.MY_TRAINER_BACKEND}/auth/reset-password`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ password, code, passwordConfirmation }),
-    });
+    const res = await fetch(
+      `${process.env.MY_TRAINER_BACKEND}/auth/reset-password`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password, code, passwordConfirmation }),
+      }
+    );
 
     setIsChangingPwd(false);
 
-    if(res.ok) {
-        setChangePwdFailed(false);
-        router.push("/login");
+    if (res.ok) {
+      setChangePwdFailed(false);
+      router.push("/login");
     } else {
-        setChangePwdFailed(true);
+      setChangePwdFailed(true);
     }
-
   }, []);
 
   useEffect(() => {
@@ -60,8 +62,10 @@ export default function Reset() {
     router.prefetch("/login");
   }, []);
 
-  if(!router.query.code) {
+  if (!router.query.code) {
     return <div>Forbidden</div>;
+  } else {
+    console.log(router.query.code);
   }
 
   return (
@@ -79,7 +83,7 @@ export default function Reset() {
           Reset Password
         </Typography>
         <form className={classes.form} onSubmit={sendResetEmail}>
-        <TextField
+          <TextField
             variant="outlined"
             margin="normal"
             required
@@ -90,7 +94,7 @@ export default function Reset() {
             id="password"
             autoComplete="current-password"
           />
-         <TextField
+          <TextField
             variant="outlined"
             margin="normal"
             required
@@ -110,7 +114,9 @@ export default function Reset() {
           >
             Reset Password
           </Button>
-          {changePwdFailed && <Alert severity="error" >Failed to reset password</Alert>}
+          {changePwdFailed && (
+            <Alert severity="error">Failed to reset password</Alert>
+          )}
         </form>
       </div>
 
