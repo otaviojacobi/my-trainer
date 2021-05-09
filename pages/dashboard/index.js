@@ -1,14 +1,11 @@
 import Button from "@material-ui/core/Button";
 import { useSession, signOut } from "next-auth/client";
 
-import { useRouter } from "next/router";
-
 function Dashboard() {
-  const router = useRouter();
-  const [session, loading] = useSession();
+  const [session] = useSession();
 
   const logOut = async () => {
-    await signOut({callbackUrl: '/login'});
+    await signOut({callbackUrl: "/login"});
   };
 
   if (!session) {

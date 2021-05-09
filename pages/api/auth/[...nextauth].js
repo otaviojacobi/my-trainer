@@ -14,7 +14,7 @@ const options = {
         email: { label: "email", type: "email" },
         password: { label: "Password", type: "password" },
       },
-      authorize: async (credentials) => {
+      authorize: async credentials => {
         const res = await fetch(
           `${process.env.MY_TRAINER_BACKEND}/auth/local`,
           {
@@ -29,9 +29,9 @@ const options = {
         if (res.ok) {
           const user = await res.json();
           return {type: "credentials", ...user};
-        } else {
-          return null;
         }
+        return null;
+
       },
     }),
   ],
@@ -44,7 +44,7 @@ const options = {
       session.jwt = user.jwt;
       session.id = user.id;
 
-      if(user.user) {
+      if (user.user) {
         session.user.name = user.user.username;
         session.user.email = user.user.email;
       }
@@ -52,9 +52,9 @@ const options = {
       return Promise.resolve(session);
     },
     jwt: async (token, user, account) => {
-      const isSignIn = user ? true : false;
+      const isSignIn = !!user;
       if (isSignIn) {
-        if(user.type === 'credentials') {
+        if (user.type === "credentials") {
           token.jwt = user.jwt;
           token.id = user.user.id;
           token.user = user.user;
@@ -67,7 +67,7 @@ const options = {
           token.id = data.user.id;
         }
       }
-      
+
       return Promise.resolve(token);
     },
   },
