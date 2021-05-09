@@ -27,18 +27,25 @@ export default function Reset() {
 
   const [changePwdFailed, setChangePwdFailed] = useState(false);
   const [isChangingPwd, setIsChangingPwd] = useState(false);
+  
+  let code = null;
+  if(!router.query.code) {
+    code = router.query.code;
+  }
 
   const sendResetEmail = useCallback(async (event) => {
 
     event.preventDefault();
 
-    setIsChangingPwd(true);
+    if(!code) {
+      setChangePwdFailed(true);
+      return;
+    }
 
-    console.log(router.query);
+    setIsChangingPwd(true);
 
     const password = event.target.password.value;
     const passwordConfirmation = event.target.passwordConfirmation.value;
-    const code = router.query.code;
 
     const res = await fetch(
       `${process.env.MY_TRAINER_BACKEND}/auth/reset-password`,
