@@ -25,7 +25,7 @@ export default function SignUp() {
     const handleSubmit = useCallback((e) => {
       e.preventDefault()
   
-      const username = `${e.target.email.firstName} ${e.target.email.lastName}`
+      const username = `${e.target.firstName.value} ${e.target.lastName.value}`
       const email = e.target.email.value;
       const password = e.target.password.value;
 
