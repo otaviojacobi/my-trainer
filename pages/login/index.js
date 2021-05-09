@@ -17,8 +17,13 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 
+import GoogleButton from 'react-google-button'
+
 import Copyright from '../../src/components/Copyright';
+import DividerWithText from '../../src/components/DividerWithText';
 import useStyles from '../../src/loginRegisterStyle';
+
+import { useSession, signIn } from "next-auth/client";
 
 export default function SignIn() {
   const classes = useStyles();
@@ -26,40 +31,43 @@ export default function SignIn() {
 
   const [loginFailed, setLoginFailed] = useState(false);
   const [isFetchingUser, setIsFetchingUser] = useState(false);
+  const [session, loading] = useSession();
 
-  const login = (email, password) => {
-    return fetch(`${process.env.MY_TRAINER_BACKEND}/auth/local`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        identifier: email,
-        password
-      })
-    });
-  };
-
-  const handleSubmit = useCallback(async (event) => {
+  const credentialsLogin = useCallback(async (event) => {
     event.preventDefault();
 
     setIsFetchingUser(true);
 
     const email = event.target.email.value;
     const password = event.target.password.value;
-    const res = await login(email, password);
+
+    const user = await signIn('credentials', {email, password, redirect: false});
 
     setIsFetchingUser(false);
 
-    if (res.ok) {
+    if (user.ok) {
       router.push('/dashboard');
     } else {
       setLoginFailed(true);
     }
   }, []);
 
+  const googleLogin = event => {
+
+    event.preventDefault();
+
+    setIsFetchingUser(true);
+    const user = signIn('google', {callbackUrl: '/dashboard'});
+  };
+
   useEffect(() => {
     // Prefetch the dashboard page
     router.prefetch('/dashboard')
   }, []);
+
+  if(session) {
+    router.push('/dashboard');
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -69,7 +77,7 @@ export default function SignIn() {
         <Typography component="h1" variant="h5">
           Sign in!
         </Typography>
-        <form className={classes.form} onSubmit={handleSubmit}>
+        <form className={classes.form} onSubmit={credentialsLogin}>
           <TextField
             variant="outlined"
             margin="normal"
@@ -121,7 +129,11 @@ export default function SignIn() {
           </Grid>
         </form>
       </div>
-      <Box mt={8}>
+      <DividerWithText>or</DividerWithText>
+      <div style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>
+        <GoogleButton type="light" onClick={googleLogin}/>
+      </div>
+      <Box mt={5}>
         <Copyright />
       </Box>
     </Container>
