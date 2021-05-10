@@ -18,6 +18,9 @@ import Typography from "@material-ui/core/Typography";
 import Copyright from "../../src/components/Copyright";
 import useStyles from "../../src/loginRegisterStyle";
 
+import Header from "../../src/components/Header/Header";
+import HeaderLinks from "../../src/components/Header/HeaderLinks";
+
 export default function Forgot() {
   const classes = useStyles();
   const router = useRouter();
@@ -64,76 +67,87 @@ export default function Forgot() {
   }
 
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.paper}>
-        {isSendingEmail ? (
-          <CircularProgress className={classes.avatar} color="secondary" />
-        ) : (
-          <Avatar className={classes.avatar}>
-            <LockOutlinedIcon />
-          </Avatar>
-        )}
-        <Typography component="h1" variant="h5">
-          Forgotten Password
-        </Typography>
-        <form className={classes.form} onSubmit={sendResetEmail}>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            type="email"
-            autoFocus
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Send Reset Email
-          </Button>
-          {sendEmailFailed && (
-            <Alert severity="error">Failed to send reset e-mail</Alert>
+    <div>
+      <Header
+        absolute
+        color="black"
+        brand="My Trainer"
+        rightLinks={<HeaderLinks />}
+      />
+      <br />
+      <br />
+      <br />
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <div className={classes.paper}>
+          {isSendingEmail ? (
+            <CircularProgress className={classes.avatar} color="secondary" />
+          ) : (
+            <Avatar className={classes.avatar}>
+              <LockOutlinedIcon />
+            </Avatar>
           )}
-          {emailSent && (
-            <Alert severity="success">
-              {" "}
-              An e-mail was sent with following instructions !
-            </Alert>
-          )}
-          <Grid container>
-            <Grid item xs>
-              <Link
-                href="#"
-                onClick={() => router.push("/login")}
-                variant="body2"
-              >
-                Remembered it? Login
-              </Link>
+          <Typography component="h1" variant="h5">
+            Forgotten Password
+          </Typography>
+          <form className={classes.form} onSubmit={sendResetEmail}>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Email Address"
+              name="email"
+              autoComplete="email"
+              type="email"
+              autoFocus
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+            >
+              Send Reset Email
+            </Button>
+            {sendEmailFailed && (
+              <Alert severity="error">Failed to send reset e-mail</Alert>
+            )}
+            {emailSent && (
+              <Alert severity="success">
+                {" "}
+                An e-mail was sent with following instructions !
+              </Alert>
+            )}
+            <Grid container>
+              <Grid item xs>
+                <Link
+                  href="#"
+                  onClick={() => router.push("/login")}
+                  variant="body2"
+                >
+                  Remembered it? Login
+                </Link>
+              </Grid>
+              <Grid item>
+                <Link
+                  href="#"
+                  onClick={() => router.push("/signup")}
+                  variant="body2"
+                >
+                  Don&apos;t have an account ? Sign up
+                </Link>
+              </Grid>
             </Grid>
-            <Grid item>
-              <Link
-                href="#"
-                onClick={() => router.push("/signup")}
-                variant="body2"
-              >
-                Don&apos;t have an account ? Sign up
-              </Link>
-            </Grid>
-          </Grid>
-        </form>
-      </div>
+          </form>
+        </div>
 
-      <Box mt={5}>
-        <Copyright />
-      </Box>
-    </Container>
+        <Box mt={5}>
+          <Copyright />
+        </Box>
+      </Container>
+    </div>
   );
 }
