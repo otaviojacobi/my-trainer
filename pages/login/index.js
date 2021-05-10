@@ -24,6 +24,9 @@ import Copyright from "../../src/components/Copyright";
 import DividerWithText from "../../src/components/DividerWithText";
 import useStyles from "../../src/loginRegisterStyle";
 
+import Header from "../../src/components/Header/Header";
+import HeaderLinks from "../../src/components/Header/HeaderLinks";
+
 export default function SignIn() {
   const classes = useStyles();
   const router = useRouter();
@@ -32,28 +35,31 @@ export default function SignIn() {
   const [isFetchingUser, setIsFetchingUser] = useState(false);
   const [session] = useSession();
 
-  const credentialsLogin = useCallback(async event => {
-    event.preventDefault();
+  const credentialsLogin = useCallback(
+    async event => {
+      event.preventDefault();
 
-    setIsFetchingUser(true);
+      setIsFetchingUser(true);
 
-    const email = event.target.email.value;
-    const password = event.target.password.value;
+      const email = event.target.email.value;
+      const password = event.target.password.value;
 
-    const user = await signIn("credentials", {
-      email,
-      password,
-      redirect: false,
-    });
+      const user = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      });
 
-    setIsFetchingUser(false);
+      setIsFetchingUser(false);
 
-    if (user.ok) {
-      router.push("/dashboard");
-    } else {
-      setLoginFailed(true);
-    }
-  }, [router]);
+      if (user.ok) {
+        router.push("/dashboard");
+      } else {
+        setLoginFailed(true);
+      }
+    },
+    [router]
+  );
 
   const googleLogin = event => {
     event.preventDefault();
@@ -72,96 +78,107 @@ export default function SignIn() {
   }
 
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.paper}>
-        {isFetchingUser ? (
-          <CircularProgress className={classes.avatar} color="secondary" />
-        ) : (
-          <Avatar className={classes.avatar}>
-            <LockOutlinedIcon />
-          </Avatar>
-        )}
-        <Typography component="h1" variant="h5">
-          Sign in!
-        </Typography>
-        <form className={classes.form} onSubmit={credentialsLogin}>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            type="email"
-            autoFocus
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-          />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          />
-          {loginFailed && (
-            <Alert severity="error">
-              You have entered an invalid username or password
-            </Alert>
+    <div>
+      <Header
+        absolute
+        color="black"
+        brand="My Trainer"
+        rightLinks={<HeaderLinks />}
+      />
+      <br/>
+      <br/>
+      <br/>
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <div className={classes.paper}>
+          {isFetchingUser ? (
+            <CircularProgress className={classes.avatar} color="secondary" />
+          ) : (
+            <Avatar className={classes.avatar}>
+              <LockOutlinedIcon />
+            </Avatar>
           )}
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Sign In
-          </Button>
-          <Grid container>
-            <Grid item xs>
-              <Link
-                href="#"
-                onClick={() => router.push("/forgot")}
-                variant="body2"
-              >
-                Forgot password?
-              </Link>
+          <Typography component="h1" variant="h5">
+            Sign in!
+          </Typography>
+          <form className={classes.form} onSubmit={credentialsLogin}>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Email Address"
+              name="email"
+              autoComplete="email"
+              type="email"
+              autoFocus
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+            />
+            <FormControlLabel
+              control={<Checkbox value="remember" color="primary" />}
+              label="Remember me"
+            />
+            {loginFailed && (
+              <Alert severity="error">
+                You have entered an invalid username or password
+              </Alert>
+            )}
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+            >
+              Sign In
+            </Button>
+            <Grid container>
+              <Grid item xs>
+                <Link
+                  href="#"
+                  onClick={() => router.push("/forgot")}
+                  variant="body2"
+                >
+                  Forgot password?
+                </Link>
+              </Grid>
+              <Grid item>
+                <Link
+                  href="#"
+                  onClick={() => router.push("/signup")}
+                  variant="body2"
+                >
+                  Don&apos;t have an account? Sign Up
+                </Link>
+              </Grid>
             </Grid>
-            <Grid item>
-              <Link
-                href="#"
-                onClick={() => router.push("/signup")}
-                variant="body2"
-              >
-                Don&apos;t have an account? Sign Up
-              </Link>
-            </Grid>
-          </Grid>
-        </form>
-      </div>
-      <DividerWithText>or</DividerWithText>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <GoogleButton type="light" onClick={googleLogin} />
-      </div>
-      <Box mt={5}>
-        <Copyright />
-      </Box>
-    </Container>
+          </form>
+        </div>
+        <DividerWithText>or</DividerWithText>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <GoogleButton type="light" onClick={googleLogin} />
+        </div>
+        <Box mt={5}>
+          <Copyright />
+        </Box>
+      </Container>
+    </div>
   );
 }

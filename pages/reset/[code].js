@@ -15,6 +15,8 @@ import Typography from "@material-ui/core/Typography";
 import Copyright from "../../src/components/Copyright";
 import useStyles from "../../src/loginRegisterStyle";
 
+import Appbar from "../../src/components/Appbar";
+
 export default function Reset() {
   const classes = useStyles();
   const router = useRouter();
@@ -23,15 +25,13 @@ export default function Reset() {
   const [isChangingPwd, setIsChangingPwd] = useState(false);
 
   const sendResetEmail = async event => {
-
-
     event.preventDefault();
 
     setIsChangingPwd(true);
 
     const password = event.target.password.value;
     const passwordConfirmation = event.target.passwordConfirmation.value;
-    const { code }  = router.query;
+    const { code } = router.query;
 
     const res = await fetch(
       `${process.env.MY_TRAINER_BACKEND}/auth/reset-password`,
@@ -53,60 +53,63 @@ export default function Reset() {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.paper}>
-        {isChangingPwd ? (
-          <CircularProgress className={classes.avatar} color="secondary"/>
-        ) : (
-          <Avatar className={classes.avatar}>
-            <LockOutlinedIcon />
-          </Avatar>
-        )}
-        <Typography component="h1" variant="h5">
-          Reset Password
-        </Typography>
-        <form className={classes.form} onSubmit={sendResetEmail}>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="New Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="passwordConfirmation"
-            label="New Password Confirmation"
-            type="password"
-            id="passwordConfirmation"
-            autoComplete="current-password"
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Reset Password
-          </Button>
-          {changePwdFailed && (
-            <Alert severity="error">Failed to reset password</Alert>
+    <div>
+      <Appbar />
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <div className={classes.paper}>
+          {isChangingPwd ? (
+            <CircularProgress className={classes.avatar} color="secondary" />
+          ) : (
+            <Avatar className={classes.avatar}>
+              <LockOutlinedIcon />
+            </Avatar>
           )}
-        </form>
-      </div>
+          <Typography component="h1" variant="h5">
+            Reset Password
+          </Typography>
+          <form className={classes.form} onSubmit={sendResetEmail}>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="New Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="passwordConfirmation"
+              label="New Password Confirmation"
+              type="password"
+              id="passwordConfirmation"
+              autoComplete="current-password"
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+            >
+              Reset Password
+            </Button>
+            {changePwdFailed && (
+              <Alert severity="error">Failed to reset password</Alert>
+            )}
+          </form>
+        </div>
 
-      <Box mt={5}>
-        <Copyright />
-      </Box>
-    </Container>
+        <Box mt={5}>
+          <Copyright />
+        </Box>
+      </Container>
+    </div>
   );
 }
