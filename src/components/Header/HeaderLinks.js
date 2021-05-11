@@ -120,6 +120,7 @@ function HeaderLinks(props) {
         <Button
           color="transparent"
           target="_blank"
+          onClick={()=>router.push("/profile")}
           className={classes.navLink}
         >
           <Person className={classes.icons} /> {session.user.name}
