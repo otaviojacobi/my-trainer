@@ -47,12 +47,8 @@ function HeaderLinks(props) {
           }}
           buttonIcon={Language}
           dropdownList={[
-            <Link href="#" locale="en">
-            <a className={classes.dropdownLink}> English </a>
-            </Link>,
-            <Link href="#" locale="pt-BR">
-            <a className={classes.dropdownLink}> Português </a>
-            </Link>
+            <a className={classes.dropdownLink} onClick={() => router.push(router.pathname, router.pathname, { locale: "en"})}> English </a>,
+            <a className={classes.dropdownLink} onClick={() => router.push(router.pathname, router.pathname, { locale: "pt-BR"})}> Português </a>
           ]}
         />
       </ListItem>
