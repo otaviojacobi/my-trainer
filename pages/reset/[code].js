@@ -15,9 +15,7 @@ import Typography from "@material-ui/core/Typography";
 import Copyright from "../../src/components/Copyright";
 import useStyles from "../../src/loginRegisterStyle";
 
-import Appbar from "../../src/components/Appbar";
-
-export default function Reset() {
+function Reset() {
   const classes = useStyles();
   const router = useRouter();
 
@@ -54,7 +52,6 @@ export default function Reset() {
 
   return (
     <div>
-      <Appbar />
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <div className={classes.paper}>
@@ -65,7 +62,7 @@ export default function Reset() {
               <LockOutlinedIcon />
             </Avatar>
           )}
-          <Typography component="h1" variant="h5">
+          <Typography component="h1" variant="h5" color="textPrimary">
             Reset Password
           </Typography>
           <form className={classes.form} onSubmit={sendResetEmail}>
@@ -113,3 +110,5 @@ export default function Reset() {
     </div>
   );
 }
+
+export default Reset;

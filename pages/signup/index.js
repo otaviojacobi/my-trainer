@@ -18,6 +18,9 @@ import Typography from "@material-ui/core/Typography";
 
 import GoogleButton from "react-google-button";
 
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+
 import Copyright from "../../src/components/Copyright";
 import DividerWithText from "../../src/components/DividerWithText";
 import useStyles from "../../src/loginRegisterStyle";
@@ -25,9 +28,11 @@ import useStyles from "../../src/loginRegisterStyle";
 import Header from "../../src/components/Header/Header";
 import HeaderLinks from "../../src/components/Header/HeaderLinks";
 
-export default function SignUp() {
+function SignUp() {
   const classes = useStyles();
   const router = useRouter();
+
+  const { t } = useTranslation();
 
   const [registerFailed, setRegisterFailed] = useState(false);
   const [isCreatingUser, setIsCreatingUser] = useState(false);
@@ -91,7 +96,7 @@ export default function SignUp() {
     <div>
       <Header
         absolute
-        color="black"
+        color="white"
         brand="My Trainer"
         rightLinks={<HeaderLinks />}
       />
@@ -108,8 +113,8 @@ export default function SignUp() {
               <LockOutlinedIcon />
             </Avatar>
           )}
-          <Typography component="h1" variant="h5">
-            Sign up!
+          <Typography component="h1" variant="h5" color="textPrimary">
+            {t("SIGN_UP")}!
           </Typography>
           <form className={classes.form} onSubmit={credentialsRegister}>
             <Grid container spacing={2}>
@@ -121,7 +126,7 @@ export default function SignUp() {
                   required
                   fullWidth
                   id="firstName"
-                  label="First Name"
+                  label={t("FIRST_NAME")}
                   autoFocus
                 />
               </Grid>
@@ -131,7 +136,7 @@ export default function SignUp() {
                   required
                   fullWidth
                   id="lastName"
-                  label="Last Name"
+                  label={t("LAST_NAME")}
                   name="lastName"
                   autoComplete="lname"
                 />
@@ -142,7 +147,7 @@ export default function SignUp() {
                   required
                   fullWidth
                   id="email"
-                  label="Email Address"
+                  label={t("EMAIL_ADDRESS")}
                   type="email"
                   name="email"
                   autoComplete="email"
@@ -154,7 +159,7 @@ export default function SignUp() {
                   required
                   fullWidth
                   name="password"
-                  label="Password"
+                  label={t("PASSWORD")}
                   type="password"
                   id="password"
                   autoComplete="current-password"
@@ -163,7 +168,7 @@ export default function SignUp() {
             </Grid>
             {registerFailed && (
               <Alert severity="error">
-                Invalid username, email or password
+                {t("INVALID_USER_EMAIL_PWD")}
               </Alert>
             )}
             <Button
@@ -173,7 +178,7 @@ export default function SignUp() {
               color="primary"
               className={classes.submit}
             >
-              Sign Up
+              {t("SIGN_UP")}
             </Button>
             <Grid container justify="flex-end">
               <Grid item>
@@ -182,13 +187,13 @@ export default function SignUp() {
                   onClick={() => router.push("/login")}
                   variant="body2"
                 >
-                  Already have an account? Sign in
+                  {t("ALREADY_HAVE_ACC")}
                 </Link>
               </Grid>
             </Grid>
           </form>
         </div>
-        <DividerWithText>or</DividerWithText>
+        <DividerWithText>{t("OR")}</DividerWithText>
         <div
           style={{
             display: "flex",
@@ -205,3 +210,11 @@ export default function SignUp() {
     </div>
   );
 }
+
+export const getStaticProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale, ["common"])),
+  },
+});
+
+export default SignUp;

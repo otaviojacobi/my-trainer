@@ -15,15 +15,19 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+
 import Copyright from "../../src/components/Copyright";
 import useStyles from "../../src/loginRegisterStyle";
 
 import Header from "../../src/components/Header/Header";
 import HeaderLinks from "../../src/components/Header/HeaderLinks";
 
-export default function Forgot() {
+function Forgot() {
   const classes = useStyles();
   const router = useRouter();
+  const { t } = useTranslation();
 
   const [sendEmailFailed, setSendEmailFailed] = useState(false);
   const [isSendingEmail, setIsSendingEmail] = useState(false);
@@ -70,7 +74,7 @@ export default function Forgot() {
     <div>
       <Header
         absolute
-        color="black"
+        color="white"
         brand="My Trainer"
         rightLinks={<HeaderLinks />}
       />
@@ -87,8 +91,8 @@ export default function Forgot() {
               <LockOutlinedIcon />
             </Avatar>
           )}
-          <Typography component="h1" variant="h5">
-            Forgotten Password
+          <Typography component="h1" variant="h5" color="textPrimary">
+            {t("FORGOTTEN_PASSWORD")}
           </Typography>
           <form className={classes.form} onSubmit={sendResetEmail}>
             <TextField
@@ -97,7 +101,7 @@ export default function Forgot() {
               required
               fullWidth
               id="email"
-              label="Email Address"
+              label={t("EMAIL_ADDRESS")}
               name="email"
               autoComplete="email"
               type="email"
@@ -110,15 +114,15 @@ export default function Forgot() {
               color="primary"
               className={classes.submit}
             >
-              Send Reset Email
+              {t("SEND_RESET_EMAIL")}
             </Button>
             {sendEmailFailed && (
-              <Alert severity="error">Failed to send reset e-mail</Alert>
+              <Alert severity="error">{t("FAILED_SEND_EMAIL")}</Alert>
             )}
             {emailSent && (
               <Alert severity="success">
                 {" "}
-                An e-mail was sent with following instructions !
+                {t("SUCCESS_SEND_EMAIL")}
               </Alert>
             )}
             <Grid container>
@@ -128,7 +132,7 @@ export default function Forgot() {
                   onClick={() => router.push("/login")}
                   variant="body2"
                 >
-                  Remembered it? Login
+                  {t("REMEMBER_IT")}
                 </Link>
               </Grid>
               <Grid item>
@@ -137,7 +141,7 @@ export default function Forgot() {
                   onClick={() => router.push("/signup")}
                   variant="body2"
                 >
-                  Don&apos;t have an account ? Sign up
+                  {t("DONT_HAVE_ACC")}
                 </Link>
               </Grid>
             </Grid>
@@ -151,3 +155,11 @@ export default function Forgot() {
     </div>
   );
 }
+
+export const getStaticProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale, ["common"])),
+  },
+});
+
+export default Forgot;

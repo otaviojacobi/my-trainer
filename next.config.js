@@ -3,6 +3,7 @@ const withImages = require("next-images");
 const withSass = require("@zeit/next-sass");
 const webpack = require("webpack");
 const path = require("path");
+const { i18n } = require("./next-i18next.config");
 
 module.exports = withPlugins([[withSass], [withImages]], {
   env: {
@@ -10,10 +11,11 @@ module.exports = withPlugins([[withSass], [withImages]], {
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
     NEXT_PUBLIC_DATABASE_URL: process.env.NEXT_PUBLIC_DATABASE_URL,
-    NEXTAUTH_URL: process.env.NEXTAUTH_URL
+    NEXTAUTH_URL: process.env.NEXTAUTH_URL,
   },
-  webpack: config => {
+  webpack: (config) => {
     config.resolve.modules.push(path.resolve("./"));
     return config;
   },
+  i18n
 });

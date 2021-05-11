@@ -4,7 +4,8 @@ import classNames from "classnames";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 
-// @material-ui/icons
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 // core components
 import Header from "../src/components/Header/Header";
@@ -19,16 +20,18 @@ import styles from "../assets/jss/nextjs-material-kit/pages/landingPage";
 
 // Sections for this page
 import ProductSection from "../pages-sections/LandingPage-Sections/ProductSection";
-//import TeamSection from "../pages-sections/LandingPage-Sections/TeamSection";
 import WorkSection from "../pages-sections/LandingPage-Sections/WorkSection";
 
 const dashboardRoutes = [];
 
 const useStyles = makeStyles(styles);
 
-export default function LandingPage(props) {
+function LandingPage(props) {
   const classes = useStyles();
   const { ...rest } = props;
+
+  const { t } = useTranslation("common");
+
   return (
     <div>
       <Header
@@ -39,7 +42,7 @@ export default function LandingPage(props) {
         fixed
         changeColorOnScroll={{
           height: 400,
-          color: "white"
+          color: "white",
         }}
         {...rest}
       />
@@ -47,15 +50,15 @@ export default function LandingPage(props) {
         <div className={classes.container}>
           <GridContainer>
             <GridItem xs={12} sm={12} md={6}>
-              <h1 className={classes.title}>Your Story Starts With Us.</h1>
+              <h1 className={classes.title}>{t("YOUR_STORY")}</h1>
               <h4>
-                Wants to start practicing and don&apos;t know how ?
-                <br/>
-                Wants to grow and meet more people ?
-                <br/>
-                Wants to make your life simpler ?
-                <br/>
-                We got you covered.
+                {t("WANTS_TO_START_MESSAGE")}
+                <br />
+                {t("WANTS_TO_GROW_MESSAGE")}
+                <br />
+                {t("WANTS_TO_SIMPLE_MESSAGE")}
+                <br />
+                {t("WE_COVERED_MESSAGE")}
               </h4>
               <br />
               <Button
@@ -66,7 +69,7 @@ export default function LandingPage(props) {
                 rel="noopener noreferrer"
               >
                 <i className="fas fa-play" />
-                Watch video
+                {t("WATCH_VIDEO")}
               </Button>
             </GridItem>
           </GridContainer>
@@ -82,3 +85,11 @@ export default function LandingPage(props) {
     </div>
   );
 }
+
+export const getStaticProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale, ["common"])),
+  },
+});
+
+export default LandingPage;

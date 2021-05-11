@@ -7,8 +7,6 @@ import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
 import Alert from "@material-ui/lab/Alert";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
@@ -20,6 +18,9 @@ import Typography from "@material-ui/core/Typography";
 
 import GoogleButton from "react-google-button";
 
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+
 import Copyright from "../../src/components/Copyright";
 import DividerWithText from "../../src/components/DividerWithText";
 import useStyles from "../../src/loginRegisterStyle";
@@ -27,9 +28,10 @@ import useStyles from "../../src/loginRegisterStyle";
 import Header from "../../src/components/Header/Header";
 import HeaderLinks from "../../src/components/Header/HeaderLinks";
 
-export default function SignIn() {
+function SignIn() {
   const classes = useStyles();
   const router = useRouter();
+  const { t } = useTranslation();
 
   const [loginFailed, setLoginFailed] = useState(false);
   const [isFetchingUser, setIsFetchingUser] = useState(false);
@@ -81,7 +83,7 @@ export default function SignIn() {
     <div>
       <Header
         absolute
-        color="black"
+        color="white"
         brand="My Trainer"
         rightLinks={<HeaderLinks />}
       />
@@ -98,8 +100,8 @@ export default function SignIn() {
               <LockOutlinedIcon />
             </Avatar>
           )}
-          <Typography component="h1" variant="h5">
-            Sign in!
+          <Typography component="h1" variant="h5" color="textPrimary">
+            {t("LOG_IN")}!
           </Typography>
           <form className={classes.form} onSubmit={credentialsLogin}>
             <TextField
@@ -108,7 +110,7 @@ export default function SignIn() {
               required
               fullWidth
               id="email"
-              label="Email Address"
+              label={t("EMAIL_ADDRESS")}
               name="email"
               autoComplete="email"
               type="email"
@@ -120,18 +122,14 @@ export default function SignIn() {
               required
               fullWidth
               name="password"
-              label="Password"
+              label={t("PASSWORD")}
               type="password"
               id="password"
               autoComplete="current-password"
             />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
             {loginFailed && (
               <Alert severity="error">
-                You have entered an invalid username or password
+                {t("INVALID_USERNAME_PASSWORD")}
               </Alert>
             )}
             <Button
@@ -141,7 +139,7 @@ export default function SignIn() {
               color="primary"
               className={classes.submit}
             >
-              Sign In
+              {t("LOG_IN")}
             </Button>
             <Grid container>
               <Grid item xs>
@@ -150,7 +148,7 @@ export default function SignIn() {
                   onClick={() => router.push("/forgot")}
                   variant="body2"
                 >
-                  Forgot password?
+                  {t("FORGOT_PASSWORD")}
                 </Link>
               </Grid>
               <Grid item>
@@ -159,13 +157,13 @@ export default function SignIn() {
                   onClick={() => router.push("/signup")}
                   variant="body2"
                 >
-                  Don&apos;t have an account? Sign Up
+                  {t("DONT_HAVE_ACC")}
                 </Link>
               </Grid>
             </Grid>
           </form>
         </div>
-        <DividerWithText>or</DividerWithText>
+        <DividerWithText>{t("OR")}</DividerWithText>
         <div
           style={{
             display: "flex",
@@ -182,3 +180,11 @@ export default function SignIn() {
     </div>
   );
 }
+
+export const getStaticProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale, ["common"])),
+  },
+});
+
+export default SignIn;

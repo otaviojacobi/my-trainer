@@ -2,10 +2,12 @@ import React from "react";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 
+import { useTranslation } from "next-i18next";
+
 // @material-ui/icons
-import Chat from "@material-ui/icons/Chat";
+import ListAlt from "@material-ui/icons/ListAlt";
 import VerifiedUser from "@material-ui/icons/VerifiedUser";
-import Fingerprint from "@material-ui/icons/Fingerprint";
+import AttachMoney from "@material-ui/icons/AttachMoney";
 // core components
 import GridContainer from "../../src/components/Grid/GridContainer";
 import GridItem from "../../src/components/Grid/GridItem";
@@ -17,17 +19,15 @@ const useStyles = makeStyles(styles);
 
 export default function ProductSection() {
   const classes = useStyles();
+  const { t } = useTranslation("common");
+
   return (
     <div className={classes.section}>
       <GridContainer justify="center">
         <GridItem xs={12} sm={12} md={8}>
-          <h2 className={classes.title}>Let{"'"}s talk product</h2>
+          <h2 className={classes.title}>{t("TALK_PRODUCT")}</h2>
           <h5 className={classes.description}>
-            This is the paragraph where you can write more details about your
-            product. Keep you user engaged by providing meaningful information.
-            Remember that by this time, the user is curious, otherwise he wouldn
-            {"'"}t scroll to get here. Add a button if you want the user to see
-            more.
+            {t("PRODUCT_MESSAGE")}
           </h5>
         </GridItem>
       </GridContainer>
@@ -35,17 +35,17 @@ export default function ProductSection() {
         <GridContainer>
           <GridItem xs={12} sm={12} md={4}>
             <InfoArea
-              title="Free Chat"
-              description="Divide details about your product or agency work into parts. Write a few lines about each one. A paragraph describing a feature will be enough."
-              icon={Chat}
-              iconColor="info"
+              title={t("TRAINING_SHEET")}
+              description={t("TRAINING_SHEET_DESCR")}
+              icon={ListAlt}
+              iconColor="danger"
               vertical
             />
           </GridItem>
           <GridItem xs={12} sm={12} md={4}>
             <InfoArea
-              title="Verified Users"
-              description="Divide details about your product or agency work into parts. Write a few lines about each one. A paragraph describing a feature will be enough."
+              title={t("VERIFIED_CLUBS")}
+              description={t("VERIFIED_CLUBS_DESCR")}
               icon={VerifiedUser}
               iconColor="success"
               vertical
@@ -53,10 +53,10 @@ export default function ProductSection() {
           </GridItem>
           <GridItem xs={12} sm={12} md={4}>
             <InfoArea
-              title="Fingerprint"
-              description="Divide details about your product or agency work into parts. Write a few lines about each one. A paragraph describing a feature will be enough."
-              icon={Fingerprint}
-              iconColor="danger"
+              title={t("FINANTIAL")}
+              description={t("FINANTIAL_DESCR")}
+              icon={AttachMoney}
+              iconColor="info"
               vertical
             />
           </GridItem>

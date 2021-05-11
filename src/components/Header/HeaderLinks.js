@@ -12,9 +12,11 @@ import Tooltip from "@material-ui/core/Tooltip";
 import Icon from "@material-ui/core/Icon";
 
 // @material-ui/icons
-import { Apps, Lock, LockOpen, AttachMoney, Person, ExitToApp } from "@material-ui/icons";
+import { Apps, Lock, LockOpen, AttachMoney, Person, ExitToApp, Language } from "@material-ui/icons";
 import DeleteIcon from "@material-ui/icons/Delete";
 import IconButton from "@material-ui/core/IconButton";
+
+import { useTranslation } from "next-i18next";
 
 // core components
 import CustomDropdown from "../CustomDropdown/CustomDropdown.js";
@@ -24,9 +26,11 @@ import styles from "../../../assets/jss/nextjs-material-kit/components/headerLin
 
 const useStyles = makeStyles(styles);
 
-export default function HeaderLinks(props) {
+function HeaderLinks(props) {
   const classes = useStyles();
   const [session] = useSession();
+
+  const { t } = useTranslation("common");
 
   const router = useRouter();
 
@@ -36,7 +40,27 @@ export default function HeaderLinks(props) {
         <CustomDropdown
           noLiPadding
           navDropdown
-          buttonText="Clubs"
+          buttonText={t("LANGUAGE")}
+          buttonProps={{
+            className: classes.navLink,
+            color: "transparent"
+          }}
+          buttonIcon={Language}
+          dropdownList={[
+            <Link href="#" locale="en">
+            <a className={classes.dropdownLink}> English </a>
+            </Link>,
+            <Link href="#" locale="pt-BR">
+            <a className={classes.dropdownLink}> Português </a>
+            </Link>
+          ]}
+        />
+      </ListItem>
+      <ListItem className={classes.listItem}>
+        <CustomDropdown
+          noLiPadding
+          navDropdown
+          buttonText={t("CLUBS")}
           buttonProps={{
             className: classes.navLink,
             color: "transparent"
@@ -44,14 +68,14 @@ export default function HeaderLinks(props) {
           buttonIcon={Apps}
           dropdownList={[
             <Link href="/components">
-              <a className={classes.dropdownLink}>All clubs</a>
+              <a className={classes.dropdownLink}>{t("ALL_CLUBS")}</a>
             </Link>,
             <a
               href="https://creativetimofficial.github.io/nextjs-material-kit/#/documentation?ref=njsmk-navbar"
               target="_blank"
               className={classes.dropdownLink}
             >
-              Get onboard
+              {t("GET_ONBOARD")}
             </a>
           ]}
         />
@@ -63,7 +87,7 @@ export default function HeaderLinks(props) {
           onClick={()=>router.push('/login')}
           className={classes.navLink}
         >
-          <AttachMoney className={classes.icons} /> PRICING
+          <AttachMoney className={classes.icons} /> {t("PRICING")}
         </Button>
       </ListItem>
       {!session && <ListItem className={classes.listItem}>
@@ -73,7 +97,7 @@ export default function HeaderLinks(props) {
           onClick={()=>router.push('/signup')}
           className={classes.navLink}
         >
-          <Lock className={classes.icons}/> SIGN UP
+          <Lock className={classes.icons}/> {t("SIGN_UP")}
         </Button>
       </ListItem>}
       {!session && <ListItem className={classes.listItem}>
@@ -83,7 +107,7 @@ export default function HeaderLinks(props) {
           onClick={()=>router.push('/login')}
           className={classes.navLink}
         >
-          <LockOpen className={classes.icons} /> LOG IN
+          <LockOpen className={classes.icons} /> {t("LOG_IN")}
         </Button>
       </ListItem>}
       {session && <ListItem className={classes.listItem}>
@@ -93,7 +117,7 @@ export default function HeaderLinks(props) {
           onClick={()=>signOut({callbackUrl: "/"})}
           className={classes.navLink}
         >
-          <ExitToApp className={classes.icons} /> LOG OUT
+          <ExitToApp className={classes.icons} /> {t("LOG_OUT")}
         </Button>
       </ListItem>}
       {session && <ListItem className={classes.listItem}>
@@ -109,3 +133,5 @@ export default function HeaderLinks(props) {
     </List>
   );
 }
+
+export default HeaderLinks;

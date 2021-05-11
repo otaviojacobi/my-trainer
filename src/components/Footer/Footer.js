@@ -8,6 +8,8 @@ import classNames from "classnames";
 import { List, ListItem } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
+import { useTranslation } from "next-i18next";
+
 // @material-ui/icons
 import Favorite from "@material-ui/icons/Favorite";
 
@@ -17,6 +19,8 @@ const useStyles = makeStyles(styles);
 
 export default function Footer(props) {
   const classes = useStyles();
+  const { t } = useTranslation("common");
+
   const { whiteFont } = props;
   const footerClasses = classNames({
     [classes.footer]: true,
@@ -37,7 +41,7 @@ export default function Footer(props) {
                 className={classes.block}
                 target="_blank"
               >
-                About us
+                {t("ABOUT_US")}
               </a>
             </ListItem>
           </List>

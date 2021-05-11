@@ -3,6 +3,7 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 
 // @material-ui/icons
+import { useTranslation } from "next-i18next";
 
 // core components
 import GridContainer from "../../src/components/Grid/GridContainer";
@@ -16,48 +17,48 @@ const useStyles = makeStyles(styles);
 
 export default function WorkSection() {
   const classes = useStyles();
+  const { t } = useTranslation("common");
+
   return (
     <div className={classes.section}>
       <GridContainer justify="center">
         <GridItem cs={12} sm={12} md={8}>
-          <h2 className={classes.title}>Contact us</h2>
-          <h4 className={classes.description}>
-            Contact us to know more about it !
-          </h4>
+          <h2 className={classes.title}>{t("CONTACT_US")}</h2>
+          <h4 className={classes.description}>{t("CONTACT_US_MESSAGE")}</h4>
           <form>
             <GridContainer>
               <GridItem xs={12} sm={12} md={6}>
                 <CustomInput
-                  labelText="Your Name"
+                  labelText={t("YOUR_NAME")}
                   id="name"
                   formControlProps={{
-                    fullWidth: true
+                    fullWidth: true,
                   }}
                 />
               </GridItem>
               <GridItem xs={12} sm={12} md={6}>
                 <CustomInput
-                  labelText="Your Email"
+                  labelText={t("YOUR_EMAIL")}
                   id="email"
                   formControlProps={{
-                    fullWidth: true
+                    fullWidth: true,
                   }}
                 />
               </GridItem>
               <CustomInput
-                labelText="Your Message"
+                labelText={t("YOUR_MESSAGE")}
                 id="message"
                 formControlProps={{
                   fullWidth: true,
-                  className: classes.textArea
+                  className: classes.textArea,
                 }}
                 inputProps={{
                   multiline: true,
-                  rows: 5
+                  rows: 5,
                 }}
               />
               <GridItem xs={12} sm={12} md={4} className={classes.textCenter}>
-                <Button color="primary">Send Message</Button>
+                <Button color="primary">{t("SEND_MESSAGE")}</Button>
               </GridItem>
             </GridContainer>
           </form>
