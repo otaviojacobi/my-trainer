@@ -47,4 +47,4 @@ MyApp.propTypes = {
   pageProps: PropTypes.object.isRequired,
 };
 
-export default withData(appWithTranslation(MyApp));
+export default appWithTranslation(withData(MyApp));
