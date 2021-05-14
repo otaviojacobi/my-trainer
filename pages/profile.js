@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React from "react";
 
 import { useSession } from "next-auth/client";
 // nodejs library that concatenates classes
@@ -16,20 +16,20 @@ import Skeleton from "@material-ui/lab/Skeleton";
 
 import { Line, Pie } from "react-chartjs-2";
 
-import exampleDataRunning from "../../assets/jss/exampleDataRunning";
-import exampleDataFunctional from "../../assets/jss/exampleDataFunctional";
+import exampleDataRunning from "../assets/jss/exampleDataRunning";
+import exampleDataFunctional from "../assets/jss/exampleDataFunctional";
 
 // core components
-import Header from "../../src/components/Header/Header";
-import Footer from "../../src/components/Footer/Footer";
-import Button from "../../src/components/CustomButtons/Button";
-import GridContainer from "../../src/components/Grid/GridContainer";
-import GridItem from "../../src/components/Grid/GridItem";
-import HeaderLinks from "../../src/components/Header/HeaderLinks";
-import NavPills from "../../src/components/NavPills/NavPills";
-import Parallax from "../../src/components/Parallax/Parallax";
+import Header from "../src/components/Header/Header";
+import Footer from "../src/components/Footer/Footer";
+import Button from "../src/components/CustomButtons/Button";
+import GridContainer from "../src/components/Grid/GridContainer";
+import GridItem from "../src/components/Grid/GridItem";
+import HeaderLinks from "../src/components/Header/HeaderLinks";
+import NavPills from "../src/components/NavPills/NavPills";
+import Parallax from "../src/components/Parallax/Parallax";
 
-import styles from "../../assets/jss/nextjs-material-kit/pages/profilePage";
+import styles from "../assets/jss/nextjs-material-kit/pages/profilePage";
 
 const useStyles = makeStyles(styles);
 

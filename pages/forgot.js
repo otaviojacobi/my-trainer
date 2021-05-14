@@ -17,11 +17,11 @@ import Typography from "@material-ui/core/Typography";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
-import Copyright from "../../src/components/Copyright";
-import useStyles from "../../src/loginRegisterStyle";
+import Copyright from "../src/components/Copyright";
+import useStyles from "../src/loginRegisterStyle";
 
-import Header from "../../src/components/Header/Header";
-import HeaderLinks from "../../src/components/Header/HeaderLinks";
+import Header from "../src/components/Header/Header";
+import HeaderLinks from "../src/components/Header/HeaderLinks";
 
 function Forgot() {
   const classes = useStyles();

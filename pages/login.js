@@ -21,56 +21,43 @@ import GoogleButton from "react-google-button";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
-import Copyright from "../../src/components/Copyright";
-import DividerWithText from "../../src/components/DividerWithText";
-import useStyles from "../../src/loginRegisterStyle";
+import Copyright from "../src/components/Copyright";
+import DividerWithText from "../src/components/DividerWithText";
+import useStyles from "../src/loginRegisterStyle";
 
-import Header from "../../src/components/Header/Header";
-import HeaderLinks from "../../src/components/Header/HeaderLinks";
+import Header from "../src/components/Header/Header";
+import HeaderLinks from "../src/components/Header/HeaderLinks";
 
-function SignUp() {
+function SignIn() {
   const classes = useStyles();
   const router = useRouter();
-
   const { t } = useTranslation();
 
-  const [registerFailed, setRegisterFailed] = useState(false);
-  const [isCreatingUser, setIsCreatingUser] = useState(false);
+  const [loginFailed, setLoginFailed] = useState(false);
+  const [isFetchingUser, setIsFetchingUser] = useState(false);
   const [session] = useSession();
 
-  const register = (username, email, password) =>
-    fetch(`${process.env.MY_TRAINER_BACKEND}/auth/local/register`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, email, password }),
-    });
-
-  const credentialsRegister = useCallback(
+  const credentialsLogin = useCallback(
     async event => {
       event.preventDefault();
 
-      setIsCreatingUser(true);
+      setIsFetchingUser(true);
 
-      const username = `${event.target.firstName.value} ${event.target.lastName.value}`;
       const email = event.target.email.value;
       const password = event.target.password.value;
-      const res = await register(username, email, password);
 
-      setIsCreatingUser(false);
+      const user = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      });
 
-      let user = { ok: false };
-      if (res.ok) {
-        user = await signIn("credentials", {
-          email,
-          password,
-          redirect: false,
-        });
-      }
+      setIsFetchingUser(false);
+
       if (user.ok) {
-        setRegisterFailed(false);
         router.push("/dashboard");
       } else {
-        setRegisterFailed(true);
+        setLoginFailed(true);
       }
     },
     [router]
@@ -79,7 +66,7 @@ function SignUp() {
   const googleLogin = event => {
     event.preventDefault();
 
-    setIsCreatingUser(true);
+    setIsFetchingUser(true);
     signIn("google", { callbackUrl: "/dashboard" });
   };
 
@@ -106,7 +93,7 @@ function SignUp() {
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <div className={classes.paper}>
-          {isCreatingUser ? (
+          {isFetchingUser ? (
             <CircularProgress className={classes.avatar} color="secondary" />
           ) : (
             <Avatar className={classes.avatar}>
@@ -114,61 +101,35 @@ function SignUp() {
             </Avatar>
           )}
           <Typography component="h1" variant="h5" color="textPrimary">
-            {t("SIGN_UP")}!
+            {t("LOG_IN")}!
           </Typography>
-          <form className={classes.form} onSubmit={credentialsRegister}>
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  autoComplete="fname"
-                  name="firstName"
-                  variant="outlined"
-                  required
-                  fullWidth
-                  id="firstName"
-                  label={t("FIRST_NAME")}
-                  autoFocus
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  variant="outlined"
-                  required
-                  fullWidth
-                  id="lastName"
-                  label={t("LAST_NAME")}
-                  name="lastName"
-                  autoComplete="lname"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  variant="outlined"
-                  required
-                  fullWidth
-                  id="email"
-                  label={t("EMAIL_ADDRESS")}
-                  type="email"
-                  name="email"
-                  autoComplete="email"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  variant="outlined"
-                  required
-                  fullWidth
-                  name="password"
-                  label={t("PASSWORD")}
-                  type="password"
-                  id="password"
-                  autoComplete="current-password"
-                />
-              </Grid>
-            </Grid>
-            {registerFailed && (
+          <form className={classes.form} onSubmit={credentialsLogin}>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label={t("EMAIL_ADDRESS")}
+              name="email"
+              autoComplete="email"
+              type="email"
+              autoFocus
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label={t("PASSWORD")}
+              type="password"
+              id="password"
+              autoComplete="current-password"
+            />
+            {loginFailed && (
               <Alert severity="error">
-                {t("INVALID_USER_EMAIL_PWD")}
+                {t("INVALID_USERNAME_PASSWORD")}
               </Alert>
             )}
             <Button
@@ -178,16 +139,25 @@ function SignUp() {
               color="primary"
               className={classes.submit}
             >
-              {t("SIGN_UP")}
+              {t("LOG_IN")}
             </Button>
-            <Grid container justify="flex-end">
+            <Grid container>
+              <Grid item xs>
+                <Link
+                  href="#"
+                  onClick={() => router.push("/forgot")}
+                  variant="body2"
+                >
+                  {t("FORGOT_PASSWORD")}
+                </Link>
+              </Grid>
               <Grid item>
                 <Link
                   href="#"
-                  onClick={() => router.push("/login")}
+                  onClick={() => router.push("/signup")}
                   variant="body2"
                 >
-                  {t("ALREADY_HAVE_ACC")}
+                  {t("DONT_HAVE_ACC")}
                 </Link>
               </Grid>
             </Grid>
@@ -217,4 +187,4 @@ export const getStaticProps = async ({ locale }) => ({
   },
 });
 
-export default SignUp;
+export default SignIn;

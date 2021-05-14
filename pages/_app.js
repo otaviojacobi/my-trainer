@@ -8,6 +8,7 @@ import { appWithTranslation } from "next-i18next";
 
 import { Provider } from "next-auth/client";
 
+import withData from "../src/apollo";
 import theme from "../src/theme";
 
 function MyApp(props) {
@@ -46,4 +47,4 @@ MyApp.propTypes = {
   pageProps: PropTypes.object.isRequired,
 };
 
-export default appWithTranslation(MyApp);
+export default withData(appWithTranslation(MyApp));

@@ -5,8 +5,8 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 import Skeleton from "@material-ui/lab/Skeleton";
 
-import Header from "../../src/components/Header/Header";
-import HeaderLinks from "../../src/components/Header/HeaderLinks";
+import Header from "../src/components/Header/Header";
+import HeaderLinks from "../src/components/Header/HeaderLinks";
 
 function Dashboard(props) {
   const [session, loading] = useSession();

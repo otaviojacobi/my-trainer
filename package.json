@@ -27,6 +27,7 @@
     "@material-ui/lab": "^4.0.0-alpha.58",
     "@zeit/next-sass": "^1.0.1",
     "apollo-boost": "^0.4.7",
+    "apollo-link-http": "^1.5.17",
     "chart.js": "^3.2.1",
     "classnames": "^2.3.1",
     "css-loader": "^5.2.4",
