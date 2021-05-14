@@ -16,8 +16,8 @@ import Skeleton from "@material-ui/lab/Skeleton";
 
 import { Line, Pie } from "react-chartjs-2";
 
-import exampleDataRunning from "./exampleDataRunning";
-import exampleDataFunctional from "./exampleDataFunctional";
+import exampleDataRunning from "../../assets/jss/exampleDataRunning";
+import exampleDataFunctional from "../../assets/jss/exampleDataFunctional";
 
 // core components
 import Header from "../../src/components/Header/Header";
