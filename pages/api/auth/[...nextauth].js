@@ -51,6 +51,7 @@ const options = {
 
       return Promise.resolve(session);
     },
+    redirect: async url => Promise.resolve(url),
     jwt: async (token, user, account) => {
       const isSignIn = !!user;
       if (isSignIn) {

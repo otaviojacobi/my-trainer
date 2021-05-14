@@ -12,7 +12,16 @@ import Tooltip from "@material-ui/core/Tooltip";
 import Icon from "@material-ui/core/Icon";
 
 // @material-ui/icons
-import { Apps, Lock, LockOpen, AttachMoney, Person, ExitToApp, Language } from "@material-ui/icons";
+import {
+  Apps,
+  Lock,
+  LockOpen,
+  AttachMoney,
+  Person,
+  ExitToApp,
+  Language,
+  Dashboard
+} from "@material-ui/icons";
 import DeleteIcon from "@material-ui/icons/Delete";
 import IconButton from "@material-ui/core/IconButton";
 
@@ -43,12 +52,34 @@ function HeaderLinks(props) {
           buttonText={t("LANGUAGE")}
           buttonProps={{
             className: classes.navLink,
-            color: "transparent"
+            color: "transparent",
           }}
           buttonIcon={Language}
           dropdownList={[
-            <a className={classes.dropdownLink} onClick={() => router.push(router.pathname, router.pathname, { locale: "en"})}> English </a>,
-            <a className={classes.dropdownLink} onClick={() => router.push(router.pathname, router.pathname, { locale: "pt-BR"})}> Português </a>
+            <a
+              className={classes.dropdownLink}
+              onClick={() => {
+                router
+                  .push(router.pathname, router.pathname, { locale: "en" })
+                  .then(() => router.reload());
+              }}
+            >
+              {" "}
+              English{" "}
+            </a>,
+            <a
+              className={classes.dropdownLink}
+              onClick={() => {
+                router
+                  .push(router.pathname, router.pathname, {
+                    locale: "pt-BR",
+                  })
+                  .then(() => router.reload());
+              }}
+            >
+              {" "}
+              Português{" "}
+            </a>,
           ]}
         />
       </ListItem>
@@ -59,20 +90,20 @@ function HeaderLinks(props) {
           buttonText={t("CLUBS")}
           buttonProps={{
             className: classes.navLink,
-            color: "transparent"
+            color: "transparent",
           }}
           buttonIcon={Apps}
           dropdownList={[
-            <Link href="/components">
+            <Link href="/clubs">
               <a className={classes.dropdownLink}>{t("ALL_CLUBS")}</a>
             </Link>,
             <a
-              href="https://creativetimofficial.github.io/nextjs-material-kit/#/documentation?ref=njsmk-navbar"
+              href="/onboard"
               target="_blank"
               className={classes.dropdownLink}
             >
               {t("GET_ONBOARD")}
-            </a>
+            </a>,
           ]}
         />
       </ListItem>
@@ -80,53 +111,80 @@ function HeaderLinks(props) {
         <Button
           color="transparent"
           target="_blank"
-          onClick={()=>router.push('/login')}
+          onClick={() => router.push("/login")}
           className={classes.navLink}
         >
           <AttachMoney className={classes.icons} /> {t("PRICING")}
         </Button>
       </ListItem>
-      {!session && <ListItem className={classes.listItem}>
-        <Button
-          color="transparent"
-          target="_blank"
-          onClick={()=>router.push('/signup')}
-          className={classes.navLink}
-        >
-          <Lock className={classes.icons}/> {t("SIGN_UP")}
-        </Button>
-      </ListItem>}
-      {!session && <ListItem className={classes.listItem}>
-        <Button
-          color="transparent"
-          target="_blank"
-          onClick={()=>router.push('/login')}
-          className={classes.navLink}
-        >
-          <LockOpen className={classes.icons} /> {t("LOG_IN")}
-        </Button>
-      </ListItem>}
-      {session && <ListItem className={classes.listItem}>
-        <Button
-          color="transparent"
-          target="_blank"
-          onClick={()=>signOut({callbackUrl: "/"})}
-          className={classes.navLink}
-        >
-          <ExitToApp className={classes.icons} /> {t("LOG_OUT")}
-        </Button>
-      </ListItem>}
-      {session && <ListItem className={classes.listItem}>
-        <Button
-          color="transparent"
-          target="_blank"
-          onClick={()=>router.push("/profile")}
-          className={classes.navLink}
-        >
-          <Person className={classes.icons} /> {session.user.name}
-        </Button>
-      </ListItem>}
-
+      {!session && (
+        <ListItem className={classes.listItem}>
+          <Button
+            color="transparent"
+            target="_blank"
+            onClick={() => router.push("/signup")}
+            className={classes.navLink}
+          >
+            <Lock className={classes.icons} /> {t("SIGN_UP")}
+          </Button>
+        </ListItem>
+      )}
+      {!session && (
+        <ListItem className={classes.listItem}>
+          <Button
+            color="transparent"
+            target="_blank"
+            onClick={() => router.push("/login")}
+            className={classes.navLink}
+          >
+            <LockOpen className={classes.icons} /> {t("LOG_IN")}
+          </Button>
+        </ListItem>
+      )}
+      {session && (
+        <ListItem className={classes.listItem}>
+          <Button
+            color="transparent"
+            target="_blank"
+            onClick={() => signOut({ callbackUrl: "/" })}
+            className={classes.navLink}
+          >
+            <ExitToApp className={classes.icons} /> {t("LOG_OUT")}
+          </Button>
+        </ListItem>
+      )}
+      {session && (
+        <ListItem className={classes.listItem}>
+          <CustomDropdown
+            noLiPadding
+            navDropdown
+            buttonText={session.user.name}
+            buttonProps={{
+              className: classes.navLink,
+              color: "transparent",
+            }}
+            buttonIcon={Person}
+            dropdownList={[
+              <Button
+                color="transparent"
+                target="_blank"
+                onClick={() => router.push("/profile")}
+                className={classes.navLink}
+              >
+                <Person className={classes.icons} /> {t("PROFILE")}
+              </Button>,
+              <Button
+                color="transparent"
+                target="_blank"
+                onClick={() => router.push("/dashboard")}
+                className={classes.navLink}
+              >
+                <Dashboard className={classes.icons} /> {t("DASHBOARD")}
+              </Button>,
+            ]}
+          />
+        </ListItem>
+      )}
     </List>
   );
 }

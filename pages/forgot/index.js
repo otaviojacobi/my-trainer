@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { useSession } from "next-auth/client";
 
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
@@ -32,7 +31,6 @@ function Forgot() {
   const [sendEmailFailed, setSendEmailFailed] = useState(false);
   const [isSendingEmail, setIsSendingEmail] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
-  const [session] = useSession();
 
   const sendResetEmail = useCallback(async event => {
     event.preventDefault();
@@ -56,19 +54,12 @@ function Forgot() {
       setSendEmailFailed(false);
       setEmailSent(true);
     } else {
-      setEmailSent(false);
       setSendEmailFailed(true);
+      setEmailSent(false);
     }
   }, []);
 
-  useEffect(() => {
-    // Prefetch the dashboard page
-    router.prefetch("/login");
-  }, [router]);
-
-  if (session) {
-    router.push("/dashboard");
-  }
+  useEffect(() => {}, []);
 
   return (
     <div>

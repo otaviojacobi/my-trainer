@@ -42,6 +42,9 @@
     "INVALID_USER_EMAIL_PWD": "Invalid username, email or password",
     "FAILED_SEND_EMAIL": "Failed to send reset e-mail",
     "SUCCESS_SEND_EMAIL": "An e-mail was sent with following instructions !",
-    "LANGUAGE": "Language"
-
+    "LANGUAGE": "Language",
+    "RUNNING_TAB": "Running",
+    "FUNCTIONAL_TAB": "Functional",
+    "PROFILE": "Profile",
+    "DASHBOARD": "Dashboard"
 }

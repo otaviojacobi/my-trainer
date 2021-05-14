@@ -42,6 +42,9 @@
     "INVALID_USER_EMAIL_PWD": "Senha, e-mail ou usuário inválido",
     "FAILED_SEND_EMAIL": "Falho ao enviar e-mail",
     "SUCCESS_SEND_EMAIL": "Um e-mail foi enviado com mais instruções!",
-    "LANGUAGE": "Lingua"
-
+    "LANGUAGE": "Lingua",
+    "RUNNING_TAB": "Corrida",
+    "FUNCTIONAL_TAB": "Funcional",
+    "PROFILE": "Perfil",
+    "DASHBOARD": "Painel"
 }

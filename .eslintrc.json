@@ -98,6 +98,8 @@
         "args": "after-used",
         "ignoreRestSiblings": false
       }
-    ]
+    ],
+    "global-require": 0,
+    "import/no-unresolved": 0
   }
 }
