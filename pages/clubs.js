@@ -88,7 +88,7 @@ function Clubs(props) {
         <GridContainer>
           {(loading
             ? Array.from(new Array(4))
-            : data.clubs.filter(club => club.name.toLowerCase().includes(search))
+            : data.clubs.filter(club => club.name.toLowerCase().includes(search.toLowerCase()))
           ).map((club, index) => (
             <GridItem xs={12} sm={12} md={4} key={index}>
               <Card className={classes.root}>
